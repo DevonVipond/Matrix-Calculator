@@ -28,6 +28,9 @@ private:
 private slots:
     Matrix ReadMatrix();
     void Solve();
+    double Determinant(Matrix m, int n);
+    void FindDeterminant();
+    void FindCofactor(Matrix x, Matrix &submatrix, int col, int n);
 };
 
 #endif // CALCULATOR_H

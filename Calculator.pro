@@ -26,8 +26,7 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        calculator.cpp \
-    matrix.cpp
+        calculator.cpp
 
 HEADERS += \
         calculator.h \

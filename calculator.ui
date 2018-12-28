@@ -75,6 +75,37 @@ QPushButton::pressed{
         <string>Solve</string>
        </property>
       </widget>
+      <widget class="QPushButton" name="determinant">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>100</y>
+         <width>251</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+	background-color: #1ed69a;
+	font: 18pt;
+	color:rgb(24, 24, 24);
+	border: 1px solid gray;
+	padding: 5px;
+	
+}
+
+QPushButton::pressed{
+	background-color: #1ed69a;
+	font: 18pt;
+	color:rgb(24, 24, 24)
+	border: 1px solid gray;
+	padding: 5px;
+}</string>
+       </property>
+       <property name="text">
+        <string>Determinant</string>
+       </property>
+      </widget>
      </widget>
     </item>
     <item row="7" column="0" rowspan="6">
