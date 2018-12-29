@@ -30,7 +30,8 @@ SOURCES += \
 
 HEADERS += \
         calculator.h \
-    matrix.h
+    matrix.h \
+    qt_utilities.h
 
 FORMS += \
         calculator.ui

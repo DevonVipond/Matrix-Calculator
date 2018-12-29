@@ -24,9 +24,22 @@ Matrix Calculator::ReadMatrix(){
     Matrix m1;
     QString text = ui->MatrixEntryWidget->toPlainText();
     qDebug() << "setting matrix";
-    m1.createMatrix(text);
-    ui->interpretedInput->setText(m1.DisplayMatrix());
+    m1.CreateMatrix(text);
+    ui->interpretedInput->setText(DisplayMatrix(m1));
     return m1;
+}
+
+// Returns the matrix as a string
+QString Calculator::DisplayMatrix(Matrix m){
+    QString displayText = "";
+    for(int i = 0; i < m.getRow(); i++){
+        displayText += "| ";
+        for(int j = 0; j < m.getCol(); j++){
+            displayText += QString::number(m.getElement(i, j)) + " ";
+        }
+        displayText += "|\n";
+    }
+    return displayText;
 }
 
 void Calculator::Solve(){
@@ -105,13 +118,13 @@ void Calculator::FindDeterminant(){
         ui->output->setText(QString::number(m1.getElement(0, 0)));
         return;
     }
-    qDebug() << "finding deter";
+    qDebug() << "Inside FindDeterminant";
     int result = Determinant(m1, m1.getCol());
     ui->output->setText(QString::number(result));
 }
 
 double Calculator::Determinant(Matrix x, int n){
-    qDebug() << "inside det";
+    qDebug() << "Inside Determinant";
     // Check if 2 by 2 matrix
     if(n == 2){
        return x.getElement(0,0) * x.getElement(1, 1) - x.getElement(1, 0) * x.getElement(0, 1);
@@ -130,7 +143,7 @@ double Calculator::Determinant(Matrix x, int n){
 }
 
 void Calculator::FindCofactor(Matrix x, Matrix &submatrix, int col, int n){
-    qDebug() << "inside findCOF";
+    qDebug() << "Inside FindCofactor";
     for(int r = 1; r < n; r++){
         int y = 0;
         for(int c = 0; c < n; c++){
@@ -140,3 +153,4 @@ void Calculator::FindCofactor(Matrix x, Matrix &submatrix, int col, int n){
         }
     }
 }
+

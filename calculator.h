@@ -31,6 +31,7 @@ private slots:
     double Determinant(Matrix m, int n);
     void FindDeterminant();
     void FindCofactor(Matrix x, Matrix &submatrix, int col, int n);
+    QString DisplayMatrix(Matrix m);
 };
 
 #endif // CALCULATOR_H
