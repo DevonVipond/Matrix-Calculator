@@ -6,8 +6,7 @@
 
 class CalculatorTools{
 public:
-    double calcVal = 0.0; // TODO put in abstract class
-    int currentOperation = -1;
+    Matrix calcVal_;
 };
 
 namespace Ui {
@@ -26,6 +25,11 @@ private:
     Ui::Calculator *ui;
 
 private slots:
+    void ClearCalculator();
+    void MultipyMatrices();
+    void SubtractMatrices();
+    void AddMatrices();
+    void RowReduction();
     Matrix ReadMatrix();
     void Solve();
     double Determinant(Matrix m, int n);
