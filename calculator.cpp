@@ -13,12 +13,11 @@ Calculator::Calculator(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->solve, SIGNAL(released()), this, SLOT(Solve()));
     connect(ui->determinant, SIGNAL(released()), this, SLOT(FindDeterminant()));
-    connect(ui->row_reduction, SIGNAL(released()), this, SLOT(RowReduction()));
+    connect(ui->row_reduction, SIGNAL(released()), this, SLOT(FindRowReduction()));
     connect(ui->add, SIGNAL(released()), this, SLOT(AddMatrices()));
     connect(ui->subtract, SIGNAL(released()), this, SLOT(SubtractMatrices()));
     connect(ui->mult, SIGNAL(released()), this, SLOT(MultipyMatrices()));
     connect(ui->clear, SIGNAL(released()), this, SLOT(ClearCalculator()));
-
 }
 
 Calculator::~Calculator()
@@ -29,7 +28,6 @@ Calculator::~Calculator()
 Matrix Calculator::ReadMatrix(){
     Matrix m1;
     QString text = ui->MatrixEntryWidget->toPlainText();
-    qDebug() << "setting matrix";
     m1.CreateMatrix(text);
     ui->interpretedInput->setText(DisplayMatrix(m1));
     return m1;
@@ -37,7 +35,6 @@ Matrix Calculator::ReadMatrix(){
 
 // Returns the matrix as a string
 QString Calculator::DisplayMatrix(Matrix m){
-    qDebug() << "inside displayMatrix";
     QString displayText = "";
     for(int i = 0; i < m.getRows(); i++){
         displayText += "| ";
@@ -91,18 +88,14 @@ void Calculator::MultipyMatrices(){
         ui->output->setText("# Columns In The First Matrix Must Equal # Rows in The Second");
 }
 
-void Calculator::RowReduction(){
+void Calculator::FindRowReduction(){
     Matrix m1 = ReadMatrix();
-    qDebug()<<"calling RowReduction";
     m1.RowReduction();
     ui->output->setText(DisplayMatrix(m1));
-
 }
 
 void Calculator::Solve(){
-    qDebug() << "reading matrix in rowReduce";
     Matrix m1 = ReadMatrix();
-    qDebug() << "just read matrix";
     int maxRow = m1.getRows(), maxCol = m1.getCols();
     m1.printMatrix();
     int n = maxRow;
@@ -118,50 +111,47 @@ void Calculator::Solve(){
         return;
     }
 
-        for (int i=0; i<n; i++) {
-
-            // Search for maximum in this column
-            double maxEl = m1.at(i,i);
-            int maxRow = i;
-            for (int k=i+1; k<n; k++) {
-                if (m1.at(k, i) > maxEl) {
-                    maxEl = m1.at(k,i);
-                    maxRow = k;
-                }
+    for (int i=0; i<n; i++) {
+        // Search for maximum in this column
+        double maxEl = m1.at(i,i);
+        int maxRow = i;
+        for (int k=i+1; k<n; k++) {
+            if (m1.at(k, i) > maxEl) {
+                maxEl = m1.at(k,i);
+                maxRow = k;
             }
-            qDebug() << "swapping rows";
-            // Swap maximum row with current row (column by column)
-            for (int k=i; k<n+1;k++) {
-                double tmp = m1.at(maxRow, k);
-                m1.at(maxRow, k) = m1.at(i, k);
-                m1.at(i, k) = tmp;
-            }
+        }
+        // Swap maximum row with current row (column by column)
+        for (int k=i; k<n+1;k++) {
+            double tmp = m1.at(maxRow, k);
+            m1.at(maxRow, k) = m1.at(i, k);
+            m1.at(i, k) = tmp;
+        }
 
-            // Make all rows below this one 0 in current column
-            for (int k=i+1; k<n; k++) {
-                double c = -m1.at(k, i) / m1.at(i, i);
-                for (int j=i; j<n+1; j++) {
-                    if (i==j) {
-                        m1.at(k, j) = 0;
-                    } else {
-                        m1.at(k, j) += c * m1.at(i, j);
-                    }
+        // Make all rows below this one 0 in current column
+        for (int k=i+1; k<n; k++) {
+            double c = -m1.at(k, i) / m1.at(i, i);
+            for (int j=i; j<n+1; j++) {
+                if (i==j) {
+                    m1.at(k, j) = 0;
+                } else {
+                    m1.at(k, j) += c * m1.at(i, j);
                 }
             }
         }
-            qDebug() << "solving equation Ax = b";
-            // Solve equation Ax=b
-            std::vector<double> x(maxRow);
-            for (int i=maxRow-1; i>=0; i--) {
-                x[i] = m1.at(i, maxRow) / m1.at(i, i);
-                for (int k=i-1;k>=0; k--) {
-                    m1.at(k, maxRow) -= m1.at(k, i) * x[i];
-                }
-            }
-            QString answer = "";
-            for(int i = 0; i < maxRow; i++)
-                answer += "x" + QString::number(i) + " = " + QString::number(x[i]) + "\n";
-            ui->output->setText(answer);
+    }
+     // Solve equation Ax=b
+     std::vector<double> x(maxRow);
+     for (int i=maxRow-1; i>=0; i--) {
+         x[i] = m1.at(i, maxRow) / m1.at(i, i);
+         for (int k=i-1;k>=0; k--) {
+             m1.at(k, maxRow) -= m1.at(k, i) * x[i];
+         }
+     }
+     QString answer = "";
+     for(int i = 0; i < maxRow; i++)
+         answer += "x" + QString::number(i) + " = " + QString::number(x[i]) + "\n";
+     ui->output->setText(answer);
 }
 
 void Calculator::FindDeterminant(){
@@ -176,42 +166,38 @@ void Calculator::FindDeterminant(){
         ui->output->setText(QString::number(m1.at(0, 0)));
         return;
     }
-    qDebug() << "Inside FindDeterminant";
-    int result = Determinant(m1, m1.getCols());
+    int result = Determinant(m1, m1.getCols());//m1.Determinant(m1.getRows());
     ui->output->setText(QString::number(result));
 }
 
-    double Calculator::Determinant(Matrix x, int n){
-        qDebug() << "Inside Determinant";
-        // Check if 2 by 2 matrix
-        if(n == 2){
-           return x.at(0,0) * x.at(1, 1) - x.at(1, 0) * x.at(0, 1);
-        }
-        double val = 0;
-        Matrix submatrix(n, n);
-        int sign = 1;
+double Calculator::Determinant(Matrix x, int n){
+    // Check if 2 by 2 matrix
+    if(n == 2){
+       return x.at(0,0) * x.at(1, 1) - x.at(1, 0) * x.at(0, 1);
+    }
+    double val = 0;
+    Matrix submatrix(n, n);
+    int sign = 1;
 
-        for(int i = 0; i < n; i++){
-            FindCofactor(x, submatrix, i, n);
-            val += sign * x.at(0, i) * Determinant(submatrix, n-1);
-            sign *= -1;
-        }
-
-        return val;
+    for(int i = 0; i < n; i++){
+        FindCofactor(x, submatrix, i, n);
+        val += sign * x.at(0, i) * Determinant(submatrix, n-1);
+        sign *= -1;
     }
 
-    void Calculator::FindCofactor(Matrix x, Matrix &submatrix, int col, int n){
-        qDebug() << "Inside FindCofactor";
-        for(int r = 1; r < n; r++){
-            int y = 0;
-            for(int c = 0; c < n; c++){
-                if(c != col){
+    return val;
+}
+
+void Calculator::FindCofactor(Matrix x, Matrix &submatrix, int col, int n){
+    for(int r = 1; r < n; r++){
+        int y = 0;
+        for(int c = 0; c < n; c++){
+            if(c != col){
                 submatrix.at(r - 1, y++) = x.at(r, c);
-                }
             }
         }
     }
-
+}
 
 void Calculator::ClearCalculator(){
     calcVal_.clear();

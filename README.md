@@ -1,8 +1,5 @@
 # Matrix-Calculator
 
-The majority of the logic is found here:
+This projects is a Matrix Calculator built with QT. The calculator can add, subtract, multiply, solve, row reduce and find the determinant of matrices
 
-* https://github.com/DevonVipond/Matrix-Calculator/blob/master/calculator.cpp,
-* https://github.com/DevonVipond/Matrix-Calculator/blob/master/matrix.h
-
-![alt text](https://i.imgur.com/1TigQtd.jpg)
+![alt text](https://i.imgur.com/Bds1Ov5.jpg)

@@ -29,7 +29,7 @@ private slots:
     void MultipyMatrices();
     void SubtractMatrices();
     void AddMatrices();
-    void RowReduction();
+    void FindRowReduction();
     Matrix ReadMatrix();
     void Solve();
     double Determinant(Matrix m, int n);
